@@ -1,0 +1,18 @@
+{
+    "ID": "XUnity.AutoTranslator",
+    "Title": "XUnity.AutoTranslator",
+    "Description": "XUnity.AutoTranslator",
+    "Version": "0.0.1",
+    "Author": "gnarf",
+    "Tags": "Localization",
+    "Directories": [
+        {
+            "Path": "/Loadables/",
+            "Build": "<1.0.0"
+        },
+        {
+            "Path": "/Bootstrap/",
+            "Build": ">=2.0.210"
+        }
+    ]
+}
