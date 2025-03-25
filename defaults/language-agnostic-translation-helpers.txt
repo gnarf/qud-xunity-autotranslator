@@ -1,0 +1,13 @@
+// Helpers for common qud formatting patterns.
+
+// Text surrounded by square brackets is a [keybind]
+sr:"^(?<before>(.|\n)*)\[(?<key_i>[^\]]+)\](?<after>(.|\n)*)$"="${before}[${key_i}]${after}"
+
+// Text surrounded by angle brackets can also be a <keybind>
+sr:"^(?<before>(.|\n)*)<(?<key_i>[^\>]+)>(?<after>(.|\n)*)$"="${before}<${key_i}>${after}"
+
+// This is used by tooltips: %LongDescription% for instance should not get translated or it breaks them
+sr:"^(?<before>(.|\n)*)%(?<key_i>[^% ]+)%(?<after>(.|\n)*)$"="${before}%${key_i}%${after}"
+
+// Text starting with a) is also a keybind
+sr:"^(?<key_i>.)\)(?<after>(.|\n)*)$"="${key_i})${after}"

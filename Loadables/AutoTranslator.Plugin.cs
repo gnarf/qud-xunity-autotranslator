@@ -1,3 +1,4 @@
+using HarmonyLib;
 using ExIni;
 using System;
 using System.Collections.Generic;
@@ -60,13 +61,33 @@ namespace XUnity.AutoTranslator.Plugin.Qud
 
       void Awake()
       {
+         // Harmony inject the LoadTranslations???
          PluginLoader.LoadWithConfig( this );
       }
 
       static public void StartMod()
       {
-        MetricsManager.LogInfo($"Starting XUnity.AutoTranslator");
-        new AutoTranslatorPlugin().Awake();
+      
+         MetricsManager.LogInfo($"Starting XUnity.AutoTranslator");
+         new AutoTranslatorPlugin().Awake();
       }
    }
+
+   [HarmonyPatch("XUnity.AutoTranslator.Plugin.Core.TextTranslationCache", "GetTranslationFiles")]
+   public class LanguageAgnosticTranslationFileInjector
+   {
+      static IEnumerable<string> Postfix(IEnumerable<string> values)
+      {
+         if (values != null)
+         {
+            foreach (var value in values)
+            {
+               yield return value;
+            }
+         }
+         yield return Path.Combine(ModManager.GetMod("XUnityAutoTranslator").Path, "defaults", "language-agnostic-translation-helpers.txt");
+      }
+
+   }
+
 }

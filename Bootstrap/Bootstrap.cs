@@ -6,6 +6,7 @@ using System.Reflection;
 using RoslynCSharp;
 using RoslynCSharp.Compiler;
 using XRL;
+using HarmonyLib;
 
 namespace XUnity.AutoTranslator.Plugin.Qud
 {
@@ -19,13 +20,8 @@ namespace XUnity.AutoTranslator.Plugin.Qud
             {
                 MetricsManager.LogInfo($"Creating default data in {dataPath}");
                 Directory.CreateDirectory(dataPath);
-                var defaultPath = Path.Combine(ModManager.GetMod().Path, "defaults");
-                foreach (var original in Directory.GetFiles(defaultPath))
-                {
-                    var name = Path.GetRelativePath(defaultPath, original);
-                    File.Copy(original, Path.Combine(dataPath, name));
-                }
-
+                var original = Path.Combine(ModManager.GetMod().Path, "defaults", "AutoTranslatorConfig.ini");
+                File.Copy(original, Path.Combine(dataPath, "AutoTranslatorConfig.ini"));
             }
         }
 
@@ -73,6 +69,10 @@ namespace XUnity.AutoTranslator.Plugin.Qud
                 {
                     MetricsManager.LogInfo($"Showing type {@type.AssemblyQualifiedName}");
                 }
+
+                var patcher = new Harmony("XUnity.AutoTranslator.Plugin.Qud");
+                patcher.PatchAll(result.OutputAssembly);
+
                 result.OutputAssembly.GetType("XUnity.AutoTranslator.Plugin.Qud.AutoTranslatorPlugin")
                     .GetMethod("StartMod", BindingFlags.Static | BindingFlags.Public)
                     .Invoke(null, new object[]{});
